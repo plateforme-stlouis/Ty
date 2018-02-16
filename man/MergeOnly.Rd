@@ -16,15 +16,13 @@ MergeOnly(df1, df2, kro = "chrXX")
 }
 \value{
 the merged data.frame
-}
-\description{
-The data.frames come from the function GetWeight
-}
-\examples{
+
 
 df1 comes from AB15
 df2 comes from AB16
 
 kro is "chrI" or "ref|NC_001133|"
-
+}
+\description{
+The data.frames come from the function GetWeight
 }

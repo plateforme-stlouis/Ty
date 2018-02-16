@@ -1,7 +1,5 @@
 
 
-library(readr)
-library(doBy)
 
 #'
 #' Read one file and return the data.frame
@@ -16,6 +14,8 @@ library(doBy)
 #'
 #' r15 <- GetWeight("raw/fromJosh/AB15_20131114_F256_positionInfo.txt")
 #'
+#'
+#' @import readr doBy
 #'
 #' @export
 GetWeight <- function(mypath) {

@@ -19,15 +19,13 @@ rBindOnly.Signed(df1, df2, kro = "chrXX", name1 = "One", name2 = "Two")
 }
 \value{
 the binded data.frame by row
-}
-\description{
-The data.frames come from the function GetWeight
-}
-\examples{
+
 
 df1 comes from AB15
 df2 comes from AB16
 
 kro is "chrI" or "ref|NC_001133|"
-
+}
+\description{
+The data.frames come from the function GetWeight
 }
