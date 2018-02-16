@@ -16,7 +16,7 @@ Build depends on:
     Rscript -e 'library(devtools) ; devtools::check(document = FALSE)'
 
     # Check package and documentation
-    Rscript -e 'library(devtools) ; devtools::check(document)'
+    Rscript -e 'library(devtools) ; devtools::check(document = TRUE)'
 
     # Build source
     Rscript -e 'library(devtools) ; devtools::build()'
@@ -25,5 +25,5 @@ Build depends on:
     Rscript -e "library(devtools) ; devtools::build(binary = TRUE, args = c('--preclean'))"
 
     # Build documentation with Roxygen2
-    Rscript -e "library(devtools) ; devtools::document(roclets=c('rd'))"
+    Rscript -e "library(devtools) ; devtools::document()"
 ```

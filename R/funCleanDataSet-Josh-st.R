@@ -17,6 +17,7 @@ library(doBy)
 #' r15 <- GetWeight("raw/fromJosh/AB15_20131114_F256_positionInfo.txt")
 #'
 #'
+#' @export
 GetWeight <- function(mypath) {
     dat_full <- read_delim(mypath
                          , " "
@@ -106,7 +107,6 @@ GetWeight <- function(mypath) {
 #'
 #' @return the merged data.frame
 #'
-#' @examples
 #'
 #' df1 comes from AB15
 #' df2 comes from AB16
@@ -135,7 +135,6 @@ MergeOnly <- function(df1, df2, kro = "chrXX") {
 #'
 #' @return the binded data.frame by row
 #'
-#' @examples
 #'
 #' df1 comes from AB15
 #' df2 comes from AB16
