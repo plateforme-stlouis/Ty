@@ -15,6 +15,9 @@ Build depends on:
     # Check package
     Rscript -e 'library(devtools) ; devtools::check(document = FALSE)'
 
+    # Check package and documentation
+    Rscript -e 'library(devtools) ; devtools::check(document)'
+
     # Build source
     Rscript -e 'library(devtools) ; devtools::build()'
 

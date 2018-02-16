@@ -111,7 +111,7 @@ GetWeight <- function(mypath) {
 #' df1 comes from AB15
 #' df2 comes from AB16
 #'
-#' kro is "chrI" or ref|NC_001133|"
+#' kro is "chrI" or "ref|NC_001133|"
 #'
 MergeOnly <- function(df1, df2, kro = "chrXX") {
     s1 <- subset(df1, df1$chr == kro)
@@ -140,7 +140,7 @@ MergeOnly <- function(df1, df2, kro = "chrXX") {
 #' df1 comes from AB15
 #' df2 comes from AB16
 #'
-#' kro is "chrI" or ref|NC_001133|"
+#' kro is "chrI" or "ref|NC_001133|"
 #'
 rBindOnly.Signed <- function(df1, df2, kro = "chrXX", name1 = "One", name2 = "Two") {
     s1 <- subset(df1, df1$chr == kro)
