@@ -13,7 +13,8 @@ Build depends on:
 Package depends on:
  - readr
  - doBy
-(should be manage by the Install process from DECRIPTION file)
+ 
+(should be manage by the Install process from DESCRIPTION file)
 
 ```bash
     # Dependencies of the packahe
