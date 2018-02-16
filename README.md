@@ -1,5 +1,10 @@
 Toward a R package ?
 
+Build depends on:
+ - devtools
+ - roxygen2
+
+
 ```bash
     # Build Install
     R CMD INSTALL --no-multiarch --with-keep.source .
@@ -15,4 +20,7 @@ Toward a R package ?
 
     # Build binary
     Rscript -e "library(devtools) ; devtools::build(binary = TRUE, args = c('--preclean'))"
+
+    # Build documentation with Roxygen2
+    Rscript -e "library(devtools) ; devtools::document(roclets=c('rd'))"
 ```
