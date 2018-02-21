@@ -15,3 +15,9 @@ string of type ref|NC_XXXXXX|
 \description{
 Return the ref|NC_XXXXXX| of any chromosome number
 }
+\examples{
+
+GetRefChr(2)
+# should return 'ref|NC_001134|'
+
+}

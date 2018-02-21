@@ -20,7 +20,11 @@ Read one file and return the data.frame
 }
 \examples{
 
-r15 <- GetWeight("raw/fromJosh/AB15_20131114_F256_positionInfo.txt")
+AB15 <- system.file("extdata", "AB15.light.txt", package = "Ty")
+AB16 <- system.file("extdata", "AB16.light.txt", package = "Ty")
+
+r15 <- GetWeight(AB15)
+r16 <- GetWeight(AB16)
 
 
 }

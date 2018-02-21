@@ -12,7 +12,11 @@
 #'
 #' @examples
 #'
-#' r15 <- GetWeight("raw/fromJosh/AB15_20131114_F256_positionInfo.txt")
+#' AB15 <- system.file("extdata", "AB15.light.txt", package = "Ty")
+#' AB16 <- system.file("extdata", "AB16.light.txt", package = "Ty")
+#'
+#' r15 <- GetWeight(AB15)
+#' r16 <- GetWeight(AB16)
 #'
 #'
 #' @import readr doBy
@@ -113,6 +117,7 @@ GetWeight <- function(mypath) {
 #'
 #' kro is "chrI" or "ref|NC_001133|"
 #'
+#' @export
 MergeOnly <- function(df1, df2, kro = "chrXX") {
     s1 <- subset(df1, df1$chr == kro)
     s2 <- subset(df2, df2$chr == kro)
@@ -135,12 +140,14 @@ MergeOnly <- function(df1, df2, kro = "chrXX") {
 #'
 #' @return the binded data.frame by row
 #'
+#' Note:
 #'
 #' df1 comes from AB15
 #' df2 comes from AB16
 #'
 #' kro is "chrI" or "ref|NC_001133|"
 #'
+#' @export
 rBindOnly.Signed <- function(df1, df2, kro = "chrXX", name1 = "One", name2 = "Two") {
     s1 <- subset(df1, df1$chr == kro)
     s2 <- subset(df2, df2$chr == kro)
@@ -164,6 +171,7 @@ rBindOnly.Signed <- function(df1, df2, kro = "chrXX", name1 = "One", name2 = "Tw
 #' @param n the number of randomly selected rows (default: 20)
 #' @return a subset and tiny data.frame
 #'
+#' @export
 GetTinySample <- function(df, n = 20) {
     if (n > nrow(df)) {
         n <- nrow(df)
@@ -213,6 +221,12 @@ for (n in names) {
 #' @param chr.num the integer corresponding to the Chromosome
 #' @return string of type ref|NC_XXXXXX|
 #'
+#' @examples
+#'
+#' GetRefChr(2)
+#' # should return 'ref|NC_001134|'
+#'
+#' @export
 GetRefChr <- function(chr.num){
     nc_id <- chr.ref.NC[chr.num, "RefSeq_ID"]
     ref <- paste("ref|", nc_id, "|", sep = "")
@@ -223,11 +237,10 @@ GetRefChr <- function(chr.num){
 #'
 #' Return the chrX of any chromosome reference id (ref|NC_XXXXXX|)
 #'
-#'
-#'
 #' @param ref the string corresponding to Refernce id: ref|NC_XXXXXX|
 #' @return string of type chrX
 #'
+#' @export
 Ref2Str <- function(ref){
     list.refseq.id <- strsplit(ref, "|", fixed = TRUE)
     refseq.id <- list.refseq.id[[1]][2]

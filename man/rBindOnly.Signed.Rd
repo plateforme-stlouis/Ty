@@ -20,6 +20,7 @@ rBindOnly.Signed(df1, df2, kro = "chrXX", name1 = "One", name2 = "Two")
 \value{
 the binded data.frame by row
 
+Note:
 
 df1 comes from AB15
 df2 comes from AB16
