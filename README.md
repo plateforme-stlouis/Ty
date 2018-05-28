@@ -13,7 +13,7 @@ Build depends on:
 Package depends on:
  - readr
  - doBy
- 
+
 (should be manage by the Install process from DESCRIPTION file)
 
 ```bash
@@ -47,3 +47,15 @@ Some command lines for the build process
     # Build documentation with Roxygen2
     Rscript --no-init-file -e "library(devtools) ; devtools::document()"
 ```
+
+Inside R:
+```R
+library(devtools)
+# Install the package
+devtools::install()
+# Build the doc
+devtools::document()
+```
+
+Warning:
+The NAMESPACE where the functions are exported is done by `devtools::document()`.

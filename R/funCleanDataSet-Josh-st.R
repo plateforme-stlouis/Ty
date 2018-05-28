@@ -1,6 +1,5 @@
 
 
-
 #'
 #' Read one file and return the data.frame
 #'
@@ -93,7 +92,17 @@ GetWeight <- function(mypath) {
 
 
     # Hum? TODO: fix all that !!
-    res$chrX <- lapply(res$chr, Ref2Str)
+    res$chrX <- sapply(res$chr, Ref2Str)
+
+
+    res$From <- rep("Case")
+
+    # Ugly conversion
+    res$pos <- as.integer(res$pos)
+    res$weight <- as.integer(res$weight)
+    res$chr <- as.factor(res$chr)
+    res$chrX <- as.factor(res$chrX)
+    res$From <- as.factor(res$From)
 
     res
 }
@@ -190,6 +199,7 @@ GetTinySample <- function(df, n = 20) {
 #' note: stringAsFactors returns Error. Hum?
 #' therefore, apply as.character to the right columns
 #'
+#' @export
 chr.ref.NC <- read.table(header = TRUE, text = "
 chr_num  Chromosome.X     Genbank_ID RefSeq_ID  Length   chrX
 1       'Chromosome I'    BK006935.2 NC_001133  230218   chrI
@@ -235,6 +245,16 @@ GetRefChr <- function(chr.num){
 }
 
 #'
+#' Return the Length of the chromosome number
+#'
+#' @param chr.num the integer corresponding to the Chromosome
+#'
+#' @export
+GetLenghtChr <- function(chr.num) {
+    chr.ref.NC[chr.ref.NC$chr_num == 2, "Length"]
+}
+
+#'
 #' Return the chrX of any chromosome reference id (ref|NC_XXXXXX|)
 #'
 #' @param ref the string corresponding to Refernce id: ref|NC_XXXXXX|
@@ -242,6 +262,9 @@ GetRefChr <- function(chr.num){
 #'
 #' @export
 Ref2Str <- function(ref){
+    if (! is.character(ref)) {
+        ref <- as.character(ref)
+    }
     list.refseq.id <- strsplit(ref, "|", fixed = TRUE)
     refseq.id <- list.refseq.id[[1]][2]
     chrX <- chr.ref.NC[chr.ref.NC$RefSeq_ID == refseq.id, "chrX"]
@@ -249,7 +272,14 @@ Ref2Str <- function(ref){
     chrX
 }
 
-
+#'
+#' Return the boolean of Subtelo region
+#'
+#' @param pos the position (integer)
+#' @param chrX the string of the chromosome
+#' @param length.subtelo by default 30000
+#'
+#' @export
 Is.InSubtelo <- function(pos, chrX, length.subtelo = 30000){
     max.length <- chr.ref.NC[chr.ref.NC$chrX == chrX, "Length"]
     if (pos < length.subtelo | pos > max.length - length.subtelo) {
@@ -261,7 +291,103 @@ Is.InSubtelo <- function(pos, chrX, length.subtelo = 30000){
     resp
 }
 
+#'
+#' Return the Data.Frame updated if the position belong to the Subtelo region
+#'
+#' @param df the Data.Frame returned by GetWeight
+#' @return the data frame df updated
+#'
+#' @export
+GetSubtelo <- function(df) {
+    apply(df, 1, function(x) Is.InSubtelo(x[2], x[5]))
+}
 
+#'
+#' Return the Data.Frame with Random Chromosome and Position
+#' (all the weights are set to 1.)
+#'
+#' @param nsample the number of samples
+#' @return the data frame
+#'
+#' @examples
+#'
+#' GetRand(10)
+#'
+#' @export
 GetRand <- function(nsample) {
+    nchr <- nrow(chr.ref.NC)
+    samp <- sample(1:nchr, nsample, replace=TRUE)
 
+    chr <- sapply(samp, function(x) GetRefChr(x))
+    orient <- sample(c(-1, 1), nsample, replace=TRUE)
+
+    chrX <- sapply(chr, Ref2Str)
+    pos <- sapply(samp, function(x) sample(1:GetLenghtChr(x), 1))
+
+    df <- data.frame(chr = chr
+                   , pos = pos
+                   , orient = orient
+                   , weight = rep(1, nsample)
+                   , chrX = chrX
+                   , From = rep("Rand", nsample))
+                   #, stringAsFactors=TRUE)
+
+    df
+}
+
+#'
+#' Return
+#'
+#' @import doBy
+#'
+#' @export
+Is.ValidRand <- function(df.rand) {
+    is.ok <- TRUE
+    if (max(summaryBy(weight ~ chr + pos + orient, FUN=length, df.rand)[, "weight.length"]) > 1) {
+        print("Warning: Same Random position (equal chr, pos, orient).")
+        print("         Better to re-launch the random generation.")
+
+        is.ok <- FALSE
+    }
+    is.ok
+}
+
+#'
+#' Return
+#'
+#' @export
+GetDataBinded <- function(df) {
+    nsample <- nrow(df)
+    ra <- GetRand(nsample)
+    dat <- rbind(df, ra)
+
+    dat <- data.frame(dat
+                    , Subtelo=GetSubtelo(dat))
+    dat$From <- as.factor(dat$From)
+
+    dat
+}
+
+#'
+#' Return
+#'
+#' @export
+GetData <- function(df) {
+    df <- GetDataBinded(df)
+    df[sample(1:nrow(df), nrow(df)),]
+}
+
+
+#'
+#' Return
+#'
+#' @import pROC
+#'
+#' @export
+GetAUC <- function(df) {
+    model <- glm(From ~ Subtelo, weights=weight, dat, family="binomial")
+    pred <- predict(model, dat, type="response")
+    roc <- roc(dat$From, r, plot=FALSE)
+
+    auc(roc)
 }
