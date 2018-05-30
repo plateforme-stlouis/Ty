@@ -280,9 +280,12 @@ Ref2Str <- function(ref){
 #' @param length.subtelo by default 30000
 #'
 #' @export
-Is.InSubtelo <- function(pos, chrX, length.subtelo = 30000){
+Is.InSubtelo <- function(pos, chrX, length.subtelo = 30000) {
     max.length <- chr.ref.NC[chr.ref.NC$chrX == chrX, "Length"]
-    if (pos < length.subtelo | pos > max.length - length.subtelo) {
+    # Weird type system of R !!
+    pos <- as.integer(pos)
+    length.subtelo <- as.integer(length.subtelo)
+    if (pos < length.subtelo | pos > (max.length - length.subtelo)) {
         resp <- TRUE
     } else {
         resp <- FALSE
@@ -385,9 +388,9 @@ GetData <- function(df) {
 #'
 #' @export
 GetAUC <- function(df) {
-    model <- glm(From ~ Subtelo, weights=weight, dat, family="binomial")
-    pred <- predict(model, dat, type="response")
-    roc <- roc(dat$From, r, plot=FALSE)
+    model <- glm(From ~ Subtelo, weights=weight, df, family="binomial")
+    pred <- predict(model, df, type="response")
+    roc <- roc(df$From, pred, plot=FALSE)
 
     auc(roc)
 }
